@@ -8,6 +8,6 @@ cd /overlay/upper
 
 tar -cf "$newFolder/overlay_backup.gz" *
 
-cd /
+#cd /
 
-tar --exclude='sys/*' --exclude='run/*' --exclude='tmp/*' --exclude='mnt/*' --exclude='dev/*' --exclude='proc/*' --exclude='overlay/*' -cf "$newFolder/root_backup.gz" *
+#tar --exclude='sys/*' --exclude='run/*' --exclude='tmp/*' --exclude='mnt/*' --exclude='dev/*' --exclude='proc/*' --exclude='overlay/*' -cf "$newFolder/root_backup.gz" *
