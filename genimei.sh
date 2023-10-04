@@ -39,20 +39,21 @@ luhn_test() {
         fi
 }
 
-
-################ TEST #############
 ### samsung galaxy s7 edge imei prefix
 #imeiprefix="35377308"
-
-### apple iphone 14 imei prefix
+### apple iphone 14 pro imei prefix
+#imeiprefix="35637858"
+### apple iphone 14 pro max imei prefix
 imeiprefix="35868632"
 
 
-### REQUIRE OPKG grep package to be installed
+### REQUIRE OPKG 'grep' package to be installed
 
 randimei=$(printf "%s" $(head -1 /dev/urandom | hexdump -e '1/1 "%02x""\n"' | grep -m 3 -o -E "^[0-9]{2}"))
 
 sample_imei="$imeiprefix$randimei"
+
+################ TEST #############
 #sample_imei="353773086534448"
 
 #if luhn_test "$sample_imei"; then
@@ -61,9 +62,9 @@ sample_imei="$imeiprefix$randimei"
 #       echo "$sample_imei is an invalid IMEI"
 #fi
 
-
-echo "$sample_imei would be a valid looking IMEI if you added a $(luhn_checkdigit $sample_imei) to the end"
+#echo "$sample_imei would be a valid looking IMEI if you added a $(luhn_checkdigit $sample_imei) to the end"
 
 imei="$sample_imei$(luhn_checkdigit $sample_imei)"
 echo -e "AT+EGMR=1,7,\"$imei\"\r" >/dev/ttyUSB2
+
 #cat /dev/ttyUSB2
