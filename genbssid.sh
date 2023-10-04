@@ -30,33 +30,6 @@ rand_bssid()
         macaddr_new=$(printf "%s:$macaddr" $(echo "$vendor_macaddrs" | grep -o -E "$macaddr_pattern" | sed -n "$random p"))
 }
 
-clear_macaddr_options()
-{
-        wireless_config=$(grep -v -E "^.*option.*macaddr.*$" < $config_file)
-	# invert select non matching lines from $config_file and save output to $wireless_config
-}
-
-run_script()
-{
-	# precondition:
-	# must not have two SSID of exactly the same name
-	# must not have space in the SSID name
-
-        ssids=$(echo "$wireless_config" | grep -E "^.*option.*ssid" | sed -e "s/^.*option.*ssid.*'\(.*\)'.*$/\1/g")
-        set -- $ssids
-        while [ -n "$1" ]; do
-                rand_bssid # generate a new mac address
-	
-                sedcommand="s/^.*\(option.*ssid.*'$1'\).*$/\t\1\n\toption macaddr '$macaddr_new'/"
-		#sedcommand="s/^.*\(option.*ssid.*'.*'\).*$/\t\1\n\toption macaddr '$macaddr_new'/"
-                wireless_config=$(echo "$wireless_config" | sed -e "$sedcommand")
-                shift
-        done
-
-        echo "$wireless_config" > $config_file 
-	# save updated/modified config to $config_file
-}
-
 exec_script()
 {
 	for i in $(seq 0 3);
@@ -76,8 +49,6 @@ exec_script()
 	uci commit network
 }	
 
-#clear_macaddr_options
 get_vendors_macaddrs
 
-#run_script
 exec_script
